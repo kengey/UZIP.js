@@ -10,8 +10,12 @@ UZIP["parse"] = function(buf, onlyNames)	// ArrayBuffer
 	var data = new Uint8Array(buf);
 	var eocd = data.length-4;
 	
-	while(rUi(data, eocd)!=0x06054b50) eocd--;
+	while(rUi(data, eocd)!=0x06054b50 && eocd >= 0) eocd--;
 	
+	if(eocd < 0) {
+		throw "Not a zip."
+	}
+
 	var o = eocd;
 	o+=4;	// sign  = 0x06054b50
 	o+=4;  // disks = 0;
